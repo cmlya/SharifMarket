@@ -20,5 +20,4 @@ public class Customer {
 
     // GETTERS & SETTERS
     public int getID() { return ID; }
-    public void setID(int ID) { this.ID = ID; }
 }

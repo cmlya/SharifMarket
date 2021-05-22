@@ -35,7 +35,8 @@
                   break;
               default: System.out.println("Command does not exist.");
           }
-          return true;
+        Database.write();
+        return false;
       }
 
 

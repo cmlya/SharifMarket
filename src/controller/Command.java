@@ -14,7 +14,7 @@ public enum Command {
     NEW_ORDERS("ls -o"),
     CHECKOUT("checkout (\\d+)"),
     HISTORY("ls -ho"),
-    NEW_ITEM("add -n \\w+ -c \\d+ -sp \\d+ -bp \\d+"),
+    NEW_ITEM("add -n (\\w+) -c (\\d+) -sp (\\d+) -bp (\\d+)"),
     REMOVE("remove -c (\\d+)"),
     EDIT_NAME_COUNT("edit (\\d+) -n (\\w+) -c (\\d+)"),
     EDIT_NAME("edit (\\d+) -n (\\w+)"),
