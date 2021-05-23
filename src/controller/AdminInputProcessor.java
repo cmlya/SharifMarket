@@ -75,7 +75,7 @@ public class AdminInputProcessor {
             else System.out.println("Welcome back.");
             Database.getInstance().setCurrentAdmin(Admin.findAdmin(ID));
         }
-    } // DONE
+    }
 
     private void logout(Matcher matcher) {
         if (matcher.find()) {
@@ -87,7 +87,7 @@ public class AdminInputProcessor {
                     ConsoleColors.RESET + " logged out successfully.");
             Database.getInstance().setCurrentAdmin(null);
         }
-    } //DONE
+    }
 
     private void newItem(Matcher matcher) {
         if (matcher.find()) {
@@ -101,26 +101,26 @@ public class AdminInputProcessor {
             int buyingPrice = Integer.parseInt(matcher.group(4));
             if (Item.findItemByName(name) == null) {
                 int ID = randomCode();
-                new Item(name, ID, buyingPrice, sellingPrice, inStock);
+                new Item(name, ID, buyingPrice, sellingPrice, inStock, 0, 0, 0, 0);
                 System.out.println("Item added successfully. Item ID: " + ID);
             } else { System.out.println("Something went wrong. Item was not added."); }
         }
-    } // DONE
+    }
 
     private void allItems(Matcher matcher) {
         if (matcher.find())
             Item.printAll();
-    } // DONE
+    }
 
     private void itemsInStock(Matcher matcher) {
         if (matcher.find())
             Item.printInStock();
-    } // DONE
+    }
 
     private void outOfStock(Matcher matcher) {
         if (matcher.find())
             Item.printOutOfStock();
-    } // DONE
+    }
 
     private void remove(Matcher matcher) {
         if (matcher.find()) {
@@ -135,10 +135,11 @@ public class AdminInputProcessor {
                 Item item = Item.findItem(ID);
                 System.out.println("Item " + ConsoleColors.CYAN_BRIGHT + item.getName() +
                         ConsoleColors.RESET + " removed successfully");
+                Database.getInstance().addDeletedItem(item);
                 Database.getInstance().removeItem(item);
             }
         }
-    } // DONE
+    }
 
     private void editName(Matcher matcher) {
         if (matcher.find()) {
@@ -159,7 +160,7 @@ public class AdminInputProcessor {
                 Database.getInstance().setName(Item.findItem(ID), newName);
             }
         }
-    } // DONE
+    }
 
     private void editNameCount(Matcher matcher) {
         if (matcher.find()) {
@@ -201,7 +202,7 @@ public class AdminInputProcessor {
                         " currently in stock.");
             }
         }
-    } // DONE
+    }
 
     private void editSPBPCount(Matcher matcher) {
         if (matcher.find()) {
@@ -270,7 +271,7 @@ public class AdminInputProcessor {
                 + ConsoleColors.RESET + ".");
             }
         }
-    } // DONE
+    }
 
     private void checkout(Matcher matcher) {
         if (matcher.find()) {
@@ -284,31 +285,89 @@ public class AdminInputProcessor {
                 return;
             }
             Order order = Order.findOrder(orderID);
+            Item item;
+            if (Item.findItem(order.getItemID()) == null)
+                item = Item.findDeletedItem(order.getItemID());
+            else item = Item.findItem(order.getItemID());
+            Item.updateSales(item, order.getNumber(), item.getSellingPrice(), item.getBuyingPrice());
             Database.getInstance().addOrderHistory(order);
             Database.getInstance().removeOrder(order);
             System.out.println("Order checked out.");
         }
-    } // DONE
+    }
 
     private void newOrders(Matcher matcher) {
         if (matcher.find())
             Order.printOrders();
-    } // DONE
+    }
 
     private void history(Matcher matcher) {
         if (matcher.find())
             Order.printHistory();
-    } // DONE
+    }
 
     private void calculateProfit(Matcher matcher) {
+        if (matcher.find()) {
+            int profit = 0;
+            for (Item item : Database.getInstance().getItems())
+                profit += item.getItemProfit();
+            for (Item item : Database.getInstance().getDeletedItems())
+                profit += item.getItemProfit();
+            System.out.println("Total profit: " + ConsoleColors.CYAN_BRIGHT + profit + ConsoleColors.RESET);
+        }
     }
 
     private void calculateItemProfit(Matcher matcher) {
+        if(matcher.find()) {
+            int itemID = Integer.parseInt(matcher.group(1));
+            if (Item.findItem(itemID) == null && Item.findDeletedItem(itemID) == null){
+                System.out.println("No item associated with this ID.");
+                return;
+            }
+            if (Item.findItem(itemID) == null) {
+                System.out.println("Profit from " + ConsoleColors.CYAN_BRIGHT + Item.findDeletedItem(itemID).getName() +
+                       ConsoleColors.RESET + ": " + Item.findDeletedItem(itemID).getItemProfit());
+            }
+            else System.out.println("Profit from " + ConsoleColors.CYAN_BRIGHT + Item.findItem(itemID).getName() +
+                    ConsoleColors.RESET + ": " + Item.findItem(itemID).getItemProfit());
+        }
     }
 
     private void sales(Matcher matcher) {
+        if (matcher.find()) {
+            for (Item item : Database.getInstance().getItems()) {
+                System.out.println(ConsoleColors.CYAN_UNDERLINED + item.getName() +
+                        " Sales:" + ConsoleColors.RESET + "\nOrders: " + ConsoleColors.CYAN_BRIGHT + item.getOrdersIn() + ConsoleColors.RESET +
+                        "\tNumber Sold: " + ConsoleColors.CYAN_BRIGHT + item.getNumberSold() + ConsoleColors.RESET +
+                        "\nMoney Received: " + ConsoleColors.CYAN_BRIGHT + item.getMoneyMadeFrom() + ConsoleColors.RESET +
+                        "\tProfit: " + ConsoleColors.CYAN_BRIGHT + item.getItemProfit() + ConsoleColors.RESET);
+            }
+            for (Item item : Database.getInstance().getDeletedItems()) {
+                System.out.println(ConsoleColors.CYAN_UNDERLINED + item.getName() +
+                        " Sales:" + ConsoleColors.RESET + "\nOrders: " + ConsoleColors.CYAN_BRIGHT + item.getOrdersIn() + ConsoleColors.RESET +
+                        "\tNumber Sold: " + ConsoleColors.CYAN_BRIGHT + item.getNumberSold() + ConsoleColors.RESET +
+                        "\nMoney Received: " + ConsoleColors.CYAN_BRIGHT + item.getMoneyMadeFrom() + ConsoleColors.RESET +
+                        "\tProfit: " + ConsoleColors.CYAN_BRIGHT + item.getItemProfit() + ConsoleColors.RESET);
+            }
+        }
     }
 
     private void itemSales(Matcher matcher) {
+        if (matcher.find()) {
+            int itemID = Integer.parseInt(matcher.group(1));
+            if (Item.findItem(itemID) == null && Item.findDeletedItem(itemID) == null){
+                System.out.println("No item associated with this ID.");
+                return;
+            }
+            Item item;
+            if (Item.findItem(itemID) == null)
+                item = Item.findDeletedItem(itemID);
+            else item = Item.findItem(itemID);
+            System.out.println(ConsoleColors.CYAN_UNDERLINED + item.getName() +
+                    " Sales:" + ConsoleColors.RESET + "\nOrders: " + ConsoleColors.CYAN_BRIGHT + item.getOrdersIn() + ConsoleColors.RESET +
+                    "\tNumber Sold: " + ConsoleColors.CYAN_BRIGHT + item.getNumberSold() + ConsoleColors.RESET +
+                    "\nMoney Received: " + ConsoleColors.CYAN_BRIGHT + item.getMoneyMadeFrom() + ConsoleColors.RESET +
+                    "\tProfit: " + ConsoleColors.CYAN_BRIGHT + item.getItemProfit() + ConsoleColors.RESET);
+        }
     }
 }

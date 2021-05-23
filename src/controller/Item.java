@@ -16,12 +16,17 @@ public class Item {
     private int itemProfit;
 
     // constructor
-    public Item(String name, int ID, int buyingPrice, int sellingPrice, int inStock) {
+    public Item(String name, int ID, int buyingPrice, int sellingPrice, int inStock,
+                int ordersIn, int numberSold, int moneyMadeFrom, int itemProfit) {
         this.name = name;
         this.ID = ID;
         this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
         this.inStock = inStock;
+        this.ordersIn = ordersIn;
+        this.numberSold = numberSold;
+        this.moneyMadeFrom = moneyMadeFrom;
+        this.itemProfit = itemProfit;
         Database.getInstance().addItem(this);
     }
 
@@ -39,8 +44,18 @@ public class Item {
         return null;
     }
 
-    public static void addOneToOrdersIn(Item item) {
+    public static Item findDeletedItem(int ID) {
+        for (Item item : Database.getInstance().getDeletedItems())
+            if (item.ID == ID)
+                return item;
+        return null;
+    }
+
+    public static void updateSales(Item item, int count, int sellingPrice, int buyingPrice) {
         item.ordersIn++;
+        item.numberSold += count;
+        item.moneyMadeFrom += sellingPrice*count;
+        item.itemProfit += count*(sellingPrice - buyingPrice);
     }
 
 //    public static int randomCode() {

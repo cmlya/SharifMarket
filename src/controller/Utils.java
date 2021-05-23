@@ -42,7 +42,8 @@ public class Utils {
             Random rnd = new Random();
             int random = rnd.nextInt(999999);
             if (Item.findItem(Integer.parseInt(String.format("%06d", random))) == null
-            && Order.findOrder(Integer.parseInt(String.format("%06d", random))) == null)
+            && Order.findOrder(Integer.parseInt(String.format("%06d", random))) == null
+            && Item.findDeletedItem(Integer.parseInt(String.format("%06d", random))) == null)
                 return Integer.parseInt(String.format("%06d", random));
         }
     }

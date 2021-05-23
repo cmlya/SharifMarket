@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Database {
     private ArrayList<Customer> customers = new ArrayList<>();
     private ArrayList<Item> items = new ArrayList<>();
+    private ArrayList<Item> deletedItems = new ArrayList<>();
     private ArrayList<Order> orders = new ArrayList<>();
     private ArrayList<Order> orderHistory = new ArrayList<>();
     private ArrayList<Admin> admins = new ArrayList<>();
@@ -48,6 +49,7 @@ public class Database {
     public void addCustomer(Customer customer) { customers.add(customer); }
     public void addAdmin(Admin admin) { admins.add(admin); }
     public void addItem(Item item) { items.add(item); }
+    public void addDeletedItem(Item item) { deletedItems.add(item); }
     public void addOrder(Order order) { orders.add(order); }
     public void removeOrder(Order order) { orders.remove(order); }
     public void addOrderHistory(Order order) { orderHistory.add(order); }
@@ -63,6 +65,7 @@ public class Database {
 
     // GETTERS & SETTERS
     public ArrayList<Item> getItems() { return items; }
+    public ArrayList<Item> getDeletedItems() { return deletedItems; }
     public ArrayList<Order> getOrders() { return orders; }
     public ArrayList<Customer> getCustomers() { return customers; }
     public ArrayList<Admin> getAdmins() { return admins; }
