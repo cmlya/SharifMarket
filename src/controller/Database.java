@@ -8,25 +8,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Database {
-
     private ArrayList<Customer> customers = new ArrayList<>();
     private ArrayList<Item> items = new ArrayList<>();
     private ArrayList<Order> orders = new ArrayList<>();
     private ArrayList<Order> orderHistory = new ArrayList<>();
     private ArrayList<Admin> admins = new ArrayList<>();
     private Customer currentCustomer;
+    private Admin currentAdmin;
 
     static Database database;
 
     static Database getInstance() {
         if(database == null)
             read();
-            //database = new Database();
+        //database = new Database();
         return database;
     }
 
-    private Database() {
-    }
+    private Database() { }
 
     private static void read(){
         Gson gson = new Gson();
@@ -59,6 +58,8 @@ public class Database {
     public void setBuyingPrice(Item item, int newBuyingPrice) { item.setBuyingPrice(newBuyingPrice); }
     public Customer getCurrentCustomer() { return currentCustomer; }
     public void setCurrentCustomer(Customer currentCustomer) { this.currentCustomer = currentCustomer; }
+    public Admin getCurrentAdmin() { return currentAdmin; }
+    public void setCurrentAdmin(Admin currentAdmin) { this.currentAdmin = currentAdmin; }
 
     // GETTERS & SETTERS
     public ArrayList<Item> getItems() { return items; }
@@ -66,5 +67,4 @@ public class Database {
     public ArrayList<Customer> getCustomers() { return customers; }
     public ArrayList<Admin> getAdmins() { return admins; }
     public ArrayList<Order> getOrderHistory() { return orderHistory; }
-    public void setOrderHistory(ArrayList<Order> orderHistory) { this.orderHistory = orderHistory; }
 }

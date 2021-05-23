@@ -1,7 +1,6 @@
 package controller;
 
 import model.ConsoleColors;
-
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import static controller.Utils.randomCode;
@@ -20,6 +19,8 @@ public class AdminInputProcessor {
 
     private boolean runCommand(String input) {
         if (input.equals("exit")) {
+            Database.getInstance().setCurrentAdmin(null);
+            Database.write();
             return true;
         }
 
@@ -72,11 +73,28 @@ public class AdminInputProcessor {
                 System.out.println("New admin - Welcome.");
             }
             else System.out.println("Welcome back.");
+            Database.getInstance().setCurrentAdmin(Admin.findAdmin(ID));
         }
-    }
+    } // DONE
+
+    private void logout(Matcher matcher) {
+        if (matcher.find()) {
+            if (Database.getInstance().getCurrentAdmin() == null) {
+                System.out.println("No admin is currently logged in.");
+                return;
+            }
+            System.out.println("Admin " + ConsoleColors.CYAN_BRIGHT + Database.getInstance().getCurrentAdmin().getID() +
+                    ConsoleColors.RESET + " logged out successfully.");
+            Database.getInstance().setCurrentAdmin(null);
+        }
+    } //DONE
 
     private void newItem(Matcher matcher) {
         if (matcher.find()) {
+            if (Database.getInstance().getCurrentAdmin() == null) {
+                System.out.println("Admin must be logged in to add items.");
+                return;
+            }
             String name = matcher.group(1);
             int inStock = Integer.parseInt(matcher.group(2));
             int sellingPrice = Integer.parseInt(matcher.group(3));
@@ -106,6 +124,10 @@ public class AdminInputProcessor {
 
     private void remove(Matcher matcher) {
         if (matcher.find()) {
+            if (Database.getInstance().getCurrentAdmin() == null) {
+                System.out.println("Admin must be logged in to remove items.");
+                return;
+            }
             int ID = Integer.parseInt(matcher.group(1));
             if (Item.findItem(ID) == null)
                 System.out.println(ConsoleColors.RED_BRIGHT + "Item does not exit. Nothing was removed." + ConsoleColors.RESET);
@@ -120,6 +142,10 @@ public class AdminInputProcessor {
 
     private void editName(Matcher matcher) {
         if (matcher.find()) {
+            if (Database.getInstance().getCurrentAdmin() == null) {
+                System.out.println("Admin must be logged in to edit items.");
+                return;
+            }
             int ID = Integer.parseInt(matcher.group(1));
             String newName = matcher.group(2);
             if (Item.findItem(ID) == null)
@@ -137,6 +163,10 @@ public class AdminInputProcessor {
 
     private void editNameCount(Matcher matcher) {
         if (matcher.find()) {
+            if (Database.getInstance().getCurrentAdmin() == null) {
+                System.out.println("Admin must be logged in to edit items.");
+                return;
+            }
             int ID = Integer.parseInt(matcher.group(1));
             String newName = matcher.group(2);
             int newCount = Integer.parseInt(matcher.group(3));
@@ -175,6 +205,10 @@ public class AdminInputProcessor {
 
     private void editSPBPCount(Matcher matcher) {
         if (matcher.find()) {
+            if (Database.getInstance().getCurrentAdmin() == null) {
+                System.out.println("Admin must be logged in to edit items.");
+                return;
+            }
             int ID = Integer.parseInt(matcher.group(1));
             int newSellPrice = Integer.parseInt(matcher.group(2));
             int newBuyPrice = Integer.parseInt(matcher.group(3));
@@ -240,12 +274,16 @@ public class AdminInputProcessor {
 
     private void checkout(Matcher matcher) {
         if (matcher.find()) {
-            int ID = Integer.parseInt(matcher.group(1));
-            if (Order.findOrder(ID) == null) {
+            if (Database.getInstance().getCurrentAdmin() == null) {
+                System.out.println("Admin must be logged in to checkout orders.");
+                return;
+            }
+            int orderID = Integer.parseInt(matcher.group(1));
+            if (Order.findOrder(orderID) == null) {
                 System.out.println("Order with this ID does not exit.");
                 return;
             }
-            Order order = Order.findOrder(ID);
+            Order order = Order.findOrder(orderID);
             Database.getInstance().addOrderHistory(order);
             Database.getInstance().removeOrder(order);
             System.out.println("Order checked out.");
@@ -253,16 +291,14 @@ public class AdminInputProcessor {
     } // DONE
 
     private void newOrders(Matcher matcher) {
-        if (matcher.find()) {
-
-        }
-    }
-
-    private void logout(Matcher matcher) {
-    }
+        if (matcher.find())
+            Order.printOrders();
+    } // DONE
 
     private void history(Matcher matcher) {
-    }
+        if (matcher.find())
+            Order.printHistory();
+    } // DONE
 
     private void calculateProfit(Matcher matcher) {
     }

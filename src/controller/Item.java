@@ -1,10 +1,8 @@
 package controller;
-import model.ConsoleColors;
 
+import model.ConsoleColors;
 import static controller.Utils.digitCount;
 import static controller.Utils.spaces;
-
-import java.util.Random;
 
 public class Item {
     private String name;
@@ -12,7 +10,10 @@ public class Item {
     private int buyingPrice;
     private int sellingPrice;
     private int ID;
-
+    private int ordersIn;
+    private int numberSold;
+    private int moneyMadeFrom;
+    private int itemProfit;
 
     // constructor
     public Item(String name, int ID, int buyingPrice, int sellingPrice, int inStock) {
@@ -36,6 +37,10 @@ public class Item {
             if (item.ID == ID)
                 return item;
         return null;
+    }
+
+    public static void addOneToOrdersIn(Item item) {
+        item.ordersIn++;
     }
 
 //    public static int randomCode() {
@@ -134,12 +139,18 @@ public class Item {
     // GETTERS & SETTERS
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-    public int getID() { return ID; }
-    public void setID(int ID) { this.ID = ID; }
     public int getBuyingPrice() { return buyingPrice; }
     public void setBuyingPrice(int buyingPrice) { this.buyingPrice = buyingPrice; }
     public int getSellingPrice() { return sellingPrice; }
     public void setSellingPrice(int sellingPrice) { this.sellingPrice = sellingPrice; }
     public int getInStock() { return inStock; }
     public void setInStock(int inStock) { this.inStock = inStock; }
+    public int getOrdersIn() { return ordersIn; }
+    public void setOrdersIn(int ordersIn) { this.ordersIn = ordersIn; }
+    public int getNumberSold() { return numberSold; }
+    public void setNumberSold(int numberSold) { this.numberSold = numberSold; }
+    public int getMoneyMadeFrom() { return moneyMadeFrom; }
+    public void setMoneyMadeFrom(int moneyMadeFrom) { this.moneyMadeFrom = moneyMadeFrom; }
+    public int getItemProfit() { return itemProfit; }
+    public void setItemProfit(int itemProfit) { this.itemProfit = itemProfit; }
 }

@@ -1,7 +1,6 @@
 package controller;
 
 import model.ConsoleColors;
-
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import static controller.Utils.date;
@@ -62,24 +61,24 @@ public class UserInputProcessor {
     private void allItems(Matcher matcher) {
         if (matcher.find())
             Item.printAll();
-    } // DONE
+    }
 
     private void itemsInStock(Matcher matcher) {
         if (matcher.find())
            Item.printInStock();
-    } // DONE
+    }
 
     private void outOfStock(Matcher matcher) {
         if (matcher.find())
             Item.printOutOfStock();
-    } // DONE
+    }
 
     private void order(Matcher matcher) {
         if (matcher.find()) {
-            int ID = Integer.parseInt(matcher.group(1));
+            int itemID = Integer.parseInt(matcher.group(1));
             int count = Integer.parseInt(matcher.group(2));
             boolean setOrder = true;
-            if (Item.findItem(ID) == null) {
+            if (Item.findItem(itemID) == null) {
                 System.out.println(ConsoleColors.WHITE_BACKGROUND +
                         "Item does not exist. Order not placed." + ConsoleColors.RESET);
                 return;
@@ -93,27 +92,59 @@ public class UserInputProcessor {
                 System.out.println(ConsoleColors.CYAN_BACKGROUND + "Invalid count." + ConsoleColors.RESET);
                 setOrder = false;
             }
-            else if (count > Item.findItem(ID).getInStock()) {
+            else if (count > Item.findItem(itemID).getInStock()) {
                 System.out.println("Not enough " + ConsoleColors.CYAN_BRIGHT +
-                        Item.findItem(ID).getName() + ConsoleColors.RESET + " in stock.");
+                        Item.findItem(itemID).getName() + ConsoleColors.RESET + " in stock.");
                 setOrder = false;
             }
             if (setOrder) {
                 int orderID = randomCode();
-                new Order(Database.getInstance().getCurrentCustomer().getID(), date(), orderID, count);
-                Database.getInstance().setCount(Item.findItem(ID), Item.findItem(ID).getInStock() - count);
+                String itemName = Item.findItem(itemID).getName();
+                new Order(Database.getInstance().getCurrentCustomer().getID(), date(), itemID, count, orderID, itemName);
+                Database.getInstance().setCount(Item.findItem(itemID), Item.findItem(itemID).getInStock() - count);
                 System.out.println("You have ordered " + ConsoleColors.GREEN_BACKGROUND + count +
-                        ConsoleColors.RESET + " " + ConsoleColors.GREEN_BACKGROUND + Item.findItem(ID).getName() +
+                        ConsoleColors.RESET + " " + ConsoleColors.GREEN_BACKGROUND + itemName +
                         ConsoleColors.RESET + ". Your order ID is: " + ConsoleColors.GREEN_BACKGROUND +
                         orderID + ConsoleColors.RESET);
             }
             else System.out.println(ConsoleColors.RED_BACKGROUND +"Order was not placed." + ConsoleColors.RESET);
         }
-    } // DONE
+    }
 
     private void cancelOrder(Matcher matcher) {
+        if (matcher.find()) {
+            int orderID = Integer.parseInt(matcher.group(1));
+            if (Database.getInstance().getCurrentCustomer() == null) {
+                System.out.println("You must be signed in to cancel orders.");
+                return;
+            }
+            if (Order.findOrder(orderID) == null) {
+                System.out.println(ConsoleColors.RED_BACKGROUND + "No order with such order ID exists." + ConsoleColors.RESET);
+                return;
+            }
+            if (Database.getInstance().getCurrentCustomer().getID() != Order.findOrder(orderID).getUserID()) {
+                System.out.println("You can only cancel orders you have made. Order was not cancelled.");
+                return;
+            }
+            if (Item.findItem(Order.findOrder(orderID).getItemID()) != null) {
+                Item item = Item.findItem(Order.findOrder(orderID).getItemID());
+                item.setInStock(item.getInStock() + Order.findOrder(orderID).getNumber());
+            }
+            Database.getInstance().removeOrder(Order.findOrder(orderID));
+            System.out.println(ConsoleColors.GREEN + "Order No. " + ConsoleColors.CYAN_BRIGHT + orderID + ConsoleColors.GREEN +
+                    " cancelled successfully." + ConsoleColors.RESET);
+        }
     }
 
     private void logout(Matcher matcher) {
+        if (matcher.find()) {
+            if (Database.getInstance().getCurrentCustomer() == null) {
+                System.out.println("No user is currently logged in.");
+                return;
+            }
+            System.out.println("User " + ConsoleColors.CYAN_BRIGHT + Database.getInstance().getCurrentCustomer().getID() +
+                    ConsoleColors.RESET + " logged out successfully.");
+            Database.getInstance().setCurrentCustomer(null);
+        }
     }
 }

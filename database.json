@@ -1,1 +1,1 @@
-{"customers":[{"ID":77},{"ID":2},{"ID":64}],"items":[{"name":"Eggs","inStock":49,"buyingPrice":3000,"sellingPrice":5000,"ID":628310},{"name":"Cookies","inStock":30,"buyingPrice":22500,"sellingPrice":66400,"ID":225510}],"orders":[],"orderHistory":[{"userID":77,"date":"2021/05/22 03:36:06","ID":796522,"number":1}],"admins":[{"ID":55},{"ID":88}]}
+{"customers":[{"ID":7}],"items":[],"orders":[],"orderHistory":[],"admins":[{"ID":8}]}
