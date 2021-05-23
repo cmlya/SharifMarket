@@ -20,7 +20,6 @@ public class Admin {
         return null;
     }
 
-    // GETTERS & SETTERS
     public int getID() { return ID; }
     public String getPassword() { return password; }
 }

@@ -127,6 +127,10 @@ public class AdminInputProcessor {
             int inStock = Integer.parseInt(matcher.group(2));
             int sellingPrice = Integer.parseInt(matcher.group(3));
             int buyingPrice = Integer.parseInt(matcher.group(4));
+            if (buyingPrice > sellingPrice) {
+                System.out.println("Selling price cannot be less than buying price. Item was not added.");
+                return;
+            }
             if (Item.findItemByName(name) == null) {
                 int ID = randomCode();
                 new Item(name, ID, buyingPrice, sellingPrice, inStock, 0, 0, 0, 0);
@@ -158,7 +162,7 @@ public class AdminInputProcessor {
             }
             int ID = Integer.parseInt(matcher.group(1));
             if (Item.findItem(ID) == null)
-                System.out.println(ConsoleColors.RED_BRIGHT + "Item does not exit. Nothing was removed." + ConsoleColors.RESET);
+                System.out.println(ConsoleColors.RED_BRIGHT + "Item does not exist. Nothing was removed." + ConsoleColors.RESET);
             else {
                 Item item = Item.findItem(ID);
                 System.out.println("Item " + ConsoleColors.CYAN_BRIGHT + item.getName() +

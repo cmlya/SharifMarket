@@ -63,8 +63,6 @@ public class Database {
     public void setCurrentCustomer(Customer currentCustomer) { this.currentCustomer = currentCustomer; }
     public Admin getCurrentAdmin() { return currentAdmin; }
     public void setCurrentAdmin(Admin currentAdmin) { this.currentAdmin = currentAdmin; }
-
-    // GETTERS & SETTERS
     public ArrayList<Item> getItems() { return items; }
     public ArrayList<Item> getDeletedItems() { return deletedItems; }
     public ArrayList<Order> getOrders() { return orders; }
