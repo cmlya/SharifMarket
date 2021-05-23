@@ -7,4 +7,3 @@ public class adminMain {
         new AdminInputProcessor().run();
     }
 }
-

@@ -20,9 +20,10 @@ public class Database {
     static Database database;
 
     static Database getInstance() {
-        if(database == null)
+        if(database == null) {
             read();
-        //database = new Database();
+            //database = new Database();
+        }
         return database;
     }
 

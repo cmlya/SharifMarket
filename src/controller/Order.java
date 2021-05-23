@@ -34,7 +34,7 @@ public class Order {
         int orderIDLength = 8;
         int maxUserID = 9999999;
         int dateLength = 19;
-        int maxLengthName = ("REMOVED ITEM".length());
+        int maxLengthName = ("ITEM".length());
         int maxCount = 99999;
         for (Order order : Database.getInstance().getOrders()) {
             if (order.userID > maxUserID)
@@ -66,7 +66,7 @@ public class Order {
         int orderIDLength = 8;
         int maxUserID = 9999999;
         int dateLength = 19;
-        int maxLengthName = ("REMOVED ITEM".length());
+        int maxLengthName = ("ITEM".length());
         int maxCount = 99999;
         for (Order order : Database.getInstance().getOrderHistory()) {
             if (order.userID > maxUserID)

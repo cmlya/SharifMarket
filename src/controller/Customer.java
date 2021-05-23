@@ -2,10 +2,12 @@ package controller;
 
 public class Customer {
     private int ID;
+    private String password;
 
     // constructor
-    public Customer(int ID) {
+    public Customer(int ID, String password) {
         this.ID = ID;
+        this.password = password;
         Database.getInstance().addCustomer(this);
     }
 
@@ -20,4 +22,5 @@ public class Customer {
 
     // GETTERS & SETTERS
     public int getID() { return ID; }
+    public String getPassword() { return password; }
 }

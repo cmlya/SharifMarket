@@ -58,14 +58,6 @@ public class Item {
         item.itemProfit += count*(sellingPrice - buyingPrice);
     }
 
-//    public static int randomCode() {
-//        while (true) {
-//            Random rnd = new Random();
-//            if (findItem(Integer.parseInt(String.format("%06d", rnd.nextInt(999999)))) == null)
-//                return Integer.parseInt(String.format("%06d", rnd.nextInt(999999)));
-//        }
-//    }
-
     public static void printAll() {
         int maxLengthName = ("ITEM".length());
         int maxInStock = 99999999;
@@ -161,11 +153,7 @@ public class Item {
     public int getInStock() { return inStock; }
     public void setInStock(int inStock) { this.inStock = inStock; }
     public int getOrdersIn() { return ordersIn; }
-    public void setOrdersIn(int ordersIn) { this.ordersIn = ordersIn; }
     public int getNumberSold() { return numberSold; }
-    public void setNumberSold(int numberSold) { this.numberSold = numberSold; }
     public int getMoneyMadeFrom() { return moneyMadeFrom; }
-    public void setMoneyMadeFrom(int moneyMadeFrom) { this.moneyMadeFrom = moneyMadeFrom; }
     public int getItemProfit() { return itemProfit; }
-    public void setItemProfit(int itemProfit) { this.itemProfit = itemProfit; }
 }

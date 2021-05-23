@@ -50,10 +50,38 @@ public class UserInputProcessor {
         if (matcher.find()) {
             int ID = Integer.parseInt(matcher.group(1));
             if (Customer.findCustomer(ID) == null) {
-                new Customer(ID);
-                System.out.println("New customer - Welcome.");
+                System.out.println("New customer - Welcome. Choose a password: ");
+                String password = scanner.nextLine();
+                System.out.println("Confirm password: ");
+                String testString = scanner.nextLine();
+                while (!password.equals(testString)) {
+                    System.out.println("Passwords do not match. Choose a password: ");
+                    password = scanner.nextLine();
+                    System.out.println("Confirm password: ");
+                    testString = scanner.nextLine();
+                }
+                new Customer(ID, password);
+                System.out.println("Account created successfully!");
             }
-            else System.out.println("Welcome back.");
+            else {
+                String password = Customer.findCustomer(ID).getPassword();
+                System.out.println("Enter password: ");
+                String attempt = scanner.nextLine();
+                int limit = 3;
+                while (limit > 0 && !attempt.equals(password)) {
+                    if (limit > 1) {
+                        System.out.println(ConsoleColors.RED_BACKGROUND + "Incorrect password. Try again." +
+                                ConsoleColors.RESET);
+                        attempt = scanner.nextLine();
+                        limit--;
+                    }
+                    if (limit == 1) {
+                        System.out.println("Out of attempts. You have been restricted.");
+                        return;
+                    }
+                }
+                System.out.println("Welcome back.");
+            }
             Database.getInstance().setCurrentCustomer(Customer.findCustomer(ID));
         }
     }
