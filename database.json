@@ -1,1 +1,8 @@
-{"customers":[],"items":[],"deletedItems":[],"orders":[],"orderHistory":[],"admins":[]}
+{
+  "customers": [],
+  "items": [],
+  "deletedItems": [],
+  "orders": [],
+  "orderHistory": [],
+  "admins": []
+}
