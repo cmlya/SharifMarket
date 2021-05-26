@@ -7,7 +7,6 @@ import static controller.Utils.randomCode;
 
 public class AdminInputProcessor {
     Scanner scanner = new Scanner(System.in);
-    String input;
 
     public void run() {
         boolean exit = false;
@@ -23,7 +22,6 @@ public class AdminInputProcessor {
             Database.write();
             return true;
         }
-
         switch (Command.findCommand(input)) {
             case LOGIN: login(Command.getMatcher(input, Command.LOGIN));
                 break;
@@ -59,7 +57,7 @@ public class AdminInputProcessor {
                 break;
             case ITEM_SALES: itemSales(Command.getMatcher(input, Command.ITEM_SALES));
                 break;
-            default: System.out.println("Command does not exist.");
+            default: System.out.println("Command does not exist."); return false;
         }
         Database.write();
         return false;
@@ -127,15 +125,17 @@ public class AdminInputProcessor {
             int inStock = Integer.parseInt(matcher.group(2));
             int sellingPrice = Integer.parseInt(matcher.group(3));
             int buyingPrice = Integer.parseInt(matcher.group(4));
+            if (Item.findItemByName(name) != null) {
+                System.out.println("Item with this name already exists. Item was not added.");
+                return;
+            }
             if (buyingPrice > sellingPrice) {
                 System.out.println("Selling price cannot be less than buying price. Item was not added.");
                 return;
             }
-            if (Item.findItemByName(name) == null) {
-                int ID = randomCode();
-                new Item(name, ID, buyingPrice, sellingPrice, inStock, 0, 0, 0, 0);
-                System.out.println("Item added successfully. Item ID: " + ID);
-            } else { System.out.println("Something went wrong. Item was not added."); }
+            int ID = randomCode();
+            new Item(name, ID, buyingPrice, sellingPrice, inStock, 0, 0, 0, 0);
+            System.out.println("Item added successfully. Item ID: " + ID);
         }
     }
 

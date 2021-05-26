@@ -40,7 +40,7 @@ public class UserInputProcessor {
                 break;
             case LOGOUT: logout(Command.getMatcher(input, Command.LOGOUT));
                 break;
-            default: System.out.println("Command does not exist.");
+            default: System.out.println("Command does not exist."); return false;
         }
         Database.write();
         return false;
@@ -106,14 +106,14 @@ public class UserInputProcessor {
             int itemID = Integer.parseInt(matcher.group(1));
             int count = Integer.parseInt(matcher.group(2));
             boolean setOrder = true;
+            if (Database.getInstance().getCurrentCustomer() == null) {
+                System.out.println(ConsoleColors.WHITE_BACKGROUND + "You must be logged in to place an order."
+                        + ConsoleColors.RESET);
+                return;
+            }
             if (Item.findItem(itemID) == null) {
                 System.out.println(ConsoleColors.WHITE_BACKGROUND +
                         "Item does not exist. Order not placed." + ConsoleColors.RESET);
-                return;
-            }
-            if (Database.getInstance().getCurrentCustomer() == null) {
-                System.out.println(ConsoleColors.WHITE_BACKGROUND + "You must be logged in to place an order."
-                + ConsoleColors.RESET);
                 return;
             }
             if (count <= 0) {
