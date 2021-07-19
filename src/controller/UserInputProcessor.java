@@ -1,16 +1,20 @@
 package controller;
 
 import model.ConsoleColors;
+
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
+
 import static controller.Utils.date;
 import static controller.Utils.randomCode;
 
 public class UserInputProcessor {
     Scanner scanner = new Scanner(System.in);
-    String input;
 
-    public void run(){
+    public void run() {
+        Database.getInstance().setCurrentCustomer(null);
+        Database.write();
         boolean exit = false;
         while (!exit) {
             System.out.print(ConsoleColors.YELLOW_BOLD_BRIGHT + "Enter command: " + ConsoleColors.RESET);
@@ -24,23 +28,19 @@ public class UserInputProcessor {
             Database.write();
             return true;
         }
-
+        Database.read();
         switch (Command.findCommand(input)) {
-            case LOGIN: login(Command.getMatcher(input, Command.LOGIN));
-                break;
-            case ALL_ITEMS: allItems(Command.getMatcher(input, Command.ALL_ITEMS));
-                break;
-            case ITEMS_IN_STOCK: itemsInStock(Command.getMatcher(input, Command.ITEMS_IN_STOCK));
-                break;
-            case OUT_OF_STOCK: outOfStock(Command.getMatcher(input, Command.OUT_OF_STOCK));
-                break;
-            case ORDER: order(Command.getMatcher(input, Command.ORDER));
-                break;
-            case CANCEL_ORDER: cancelOrder(Command.getMatcher(input, Command.CANCEL_ORDER));
-                break;
-            case LOGOUT: logout(Command.getMatcher(input, Command.LOGOUT));
-                break;
-            default: System.out.println("Command does not exist."); return false;
+            case LOGIN -> login(Command.getMatcher(input, Command.LOGIN));
+            case ALL_ITEMS -> allItems(Command.getMatcher(input, Command.ALL_ITEMS));
+            case ITEMS_IN_STOCK -> itemsInStock(Command.getMatcher(input, Command.ITEMS_IN_STOCK));
+            case OUT_OF_STOCK -> outOfStock(Command.getMatcher(input, Command.OUT_OF_STOCK));
+            case ORDER -> order(Command.getMatcher(input, Command.ORDER));
+            case CANCEL_ORDER -> cancelOrder(Command.getMatcher(input, Command.CANCEL_ORDER));
+            case LOGOUT -> logout(Command.getMatcher(input, Command.LOGOUT));
+            default -> {
+                System.out.println("Command does not exist.");
+                return false;
+            }
         }
         Database.write();
         return false;
@@ -62,19 +62,16 @@ public class UserInputProcessor {
                 }
                 new Customer(ID, password);
                 System.out.println("Account created successfully!");
-            }
-            else {
-                String password = Customer.findCustomer(ID).getPassword();
+            } else {
+                String password = Objects.requireNonNull(Customer.findCustomer(ID)).getPassword();
                 System.out.println("Enter password: ");
                 String attempt = scanner.nextLine();
                 int limit = 3;
                 while (limit > 0 && !attempt.equals(password)) {
-                    if (limit > 1) {
-                        System.out.println(ConsoleColors.RED_BACKGROUND + "Incorrect password. Try again." +
-                                ConsoleColors.RESET);
-                        attempt = scanner.nextLine();
-                        limit--;
-                    }
+                    System.out.println(ConsoleColors.RED_BACKGROUND + "Incorrect password. Try again." +
+                            ConsoleColors.RESET);
+                    attempt = scanner.nextLine();
+                    limit--;
                     if (limit == 1) {
                         System.out.println("Out of attempts. You have been restricted.");
                         return;
@@ -93,7 +90,7 @@ public class UserInputProcessor {
 
     private void itemsInStock(Matcher matcher) {
         if (matcher.find())
-           Item.printInStock();
+            Item.printInStock();
     }
 
     private void outOfStock(Matcher matcher) {
@@ -119,23 +116,22 @@ public class UserInputProcessor {
             if (count <= 0) {
                 System.out.println(ConsoleColors.CYAN_BACKGROUND + "Invalid count." + ConsoleColors.RESET);
                 setOrder = false;
-            }
-            else if (count > Item.findItem(itemID).getInStock()) {
+            } else if (count > Objects.requireNonNull(Item.findItem(itemID)).getInStock()) {
                 System.out.println("Not enough " + ConsoleColors.CYAN_BRIGHT +
-                        Item.findItem(itemID).getName() + ConsoleColors.RESET + " in stock.");
+                        Objects.requireNonNull(Item.findItem(itemID)).getName() + ConsoleColors.RESET + " in stock.");
                 setOrder = false;
             }
             if (setOrder) {
                 int orderID = randomCode();
-                String itemName = Item.findItem(itemID).getName();
+                String itemName = Objects.requireNonNull(Item.findItem(itemID)).getName();
                 new Order(Database.getInstance().getCurrentCustomer().getID(), date(), itemID, count, orderID, itemName);
-                Database.getInstance().setCount(Item.findItem(itemID), Item.findItem(itemID).getInStock() - count);
+                Database.getInstance().setCount(Objects.requireNonNull(Item.findItem(itemID)),
+                        Objects.requireNonNull(Item.findItem(itemID)).getInStock() - count);
                 System.out.println("You have ordered " + ConsoleColors.GREEN_BACKGROUND + count +
                         ConsoleColors.RESET + " " + ConsoleColors.GREEN_BACKGROUND + itemName +
                         ConsoleColors.RESET + ". Your order ID is: " + ConsoleColors.GREEN_BACKGROUND +
                         orderID + ConsoleColors.RESET);
-            }
-            else System.out.println(ConsoleColors.RED_BACKGROUND +"Order was not placed." + ConsoleColors.RESET);
+            } else System.out.println(ConsoleColors.RED_BACKGROUND + "Order was not placed." + ConsoleColors.RESET);
         }
     }
 
@@ -150,13 +146,13 @@ public class UserInputProcessor {
                 System.out.println(ConsoleColors.RED_BACKGROUND + "No order with such order ID exists." + ConsoleColors.RESET);
                 return;
             }
-            if (Database.getInstance().getCurrentCustomer().getID() != Order.findOrder(orderID).getUserID()) {
+            if (Database.getInstance().getCurrentCustomer().getID() != Objects.requireNonNull(Order.findOrder(orderID)).getUserID()) {
                 System.out.println("You can only cancel orders you have made. Order was not cancelled.");
                 return;
             }
-            if (Item.findItem(Order.findOrder(orderID).getItemID()) != null) {
-                Item item = Item.findItem(Order.findOrder(orderID).getItemID());
-                item.setInStock(item.getInStock() + Order.findOrder(orderID).getNumber());
+            if (Item.findItem(Objects.requireNonNull(Order.findOrder(orderID)).getItemID()) != null) {
+                Item item = Item.findItem(Objects.requireNonNull(Order.findOrder(orderID)).getItemID());
+                Objects.requireNonNull(item).setInStock(item.getInStock() + Objects.requireNonNull(Order.findOrder(orderID)).getNumber());
             }
             Database.getInstance().removeOrder(Order.findOrder(orderID));
             System.out.println(ConsoleColors.GREEN + "Order No. " + ConsoleColors.CYAN_BRIGHT + orderID + ConsoleColors.GREEN +

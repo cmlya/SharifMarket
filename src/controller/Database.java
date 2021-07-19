@@ -30,7 +30,7 @@ public class Database {
 
     private Database() { }
 
-    private static void read(){
+    static void read(){
         Gson gson = new Gson();
         try {
             FileReader fileReader = new FileReader("database.json");

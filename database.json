@@ -1,8 +1,100 @@
 {
   "customers": [],
-  "items": [],
+  "items": [
+    {
+      "name": "apple",
+      "inStock": 0,
+      "buyingPrice": 10,
+      "sellingPrice": 90,
+      "ID": 961177,
+      "ordersIn": 0,
+      "numberSold": 0,
+      "moneyMadeFrom": 0,
+      "itemProfit": 0
+    },
+    {
+      "name": "Banana",
+      "inStock": 4,
+      "buyingPrice": 9,
+      "sellingPrice": 12,
+      "ID": 581976,
+      "ordersIn": 0,
+      "numberSold": 0,
+      "moneyMadeFrom": 0,
+      "itemProfit": 0
+    },
+    {
+      "name": "cheese",
+      "inStock": 40,
+      "buyingPrice": 1,
+      "sellingPrice": 2,
+      "ID": 209028,
+      "ordersIn": 0,
+      "numberSold": 0,
+      "moneyMadeFrom": 0,
+      "itemProfit": 0
+    },
+    {
+      "name": "rice",
+      "inStock": 123,
+      "buyingPrice": 1000,
+      "sellingPrice": 1234,
+      "ID": 505051,
+      "ordersIn": 0,
+      "numberSold": 0,
+      "moneyMadeFrom": 0,
+      "itemProfit": 0
+    },
+    {
+      "name": "yogurt",
+      "inStock": 23,
+      "buyingPrice": 40,
+      "sellingPrice": 90,
+      "ID": 571144,
+      "ordersIn": 0,
+      "numberSold": 0,
+      "moneyMadeFrom": 0,
+      "itemProfit": 0
+    },
+    {
+      "name": "meat",
+      "inStock": 54,
+      "buyingPrice": 532,
+      "sellingPrice": 653,
+      "ID": 343751,
+      "ordersIn": 0,
+      "numberSold": 0,
+      "moneyMadeFrom": 0,
+      "itemProfit": 0
+    }
+  ],
   "deletedItems": [],
-  "orders": [],
+  "orders": [
+    {
+      "userID": 12,
+      "date": "2021/07/19 09:16:59",
+      "itemID": 961177,
+      "number": 2,
+      "orderID": 678323,
+      "itemName": "apple"
+    },
+    {
+      "userID": 12,
+      "date": "2021/07/19 09:22:18",
+      "itemID": 961177,
+      "number": 3,
+      "orderID": 664871,
+      "itemName": "apple"
+    },
+    {
+      "userID": 12,
+      "date": "2021/07/19 09:22:38",
+      "itemID": 961177,
+      "number": 4,
+      "orderID": 360269,
+      "itemName": "apple"
+    }
+  ],
   "orderHistory": [],
   "admins": []
 }
