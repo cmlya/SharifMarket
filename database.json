@@ -1,5 +1,10 @@
 {
-  "customers": [],
+  "customers": [
+    {
+      "ID": 2,
+      "password": "2"
+    }
+  ],
   "items": [
     {
       "name": "apple",
@@ -7,10 +12,10 @@
       "buyingPrice": 10,
       "sellingPrice": 90,
       "ID": 961177,
-      "ordersIn": 0,
-      "numberSold": 0,
-      "moneyMadeFrom": 0,
-      "itemProfit": 0
+      "ordersIn": 1,
+      "numberSold": 3,
+      "moneyMadeFrom": 270,
+      "itemProfit": 240
     },
     {
       "name": "Banana",
@@ -66,6 +71,17 @@
       "numberSold": 0,
       "moneyMadeFrom": 0,
       "itemProfit": 0
+    },
+    {
+      "name": "coffee",
+      "inStock": 31,
+      "buyingPrice": 900,
+      "sellingPrice": 2100,
+      "ID": 538528,
+      "ordersIn": 0,
+      "numberSold": 0,
+      "moneyMadeFrom": 0,
+      "itemProfit": 0
     }
   ],
   "deletedItems": [],
@@ -80,14 +96,6 @@
     },
     {
       "userID": 12,
-      "date": "2021/07/19 09:22:18",
-      "itemID": 961177,
-      "number": 3,
-      "orderID": 664871,
-      "itemName": "apple"
-    },
-    {
-      "userID": 12,
       "date": "2021/07/19 09:22:38",
       "itemID": 961177,
       "number": 4,
@@ -95,6 +103,20 @@
       "itemName": "apple"
     }
   ],
-  "orderHistory": [],
-  "admins": []
+  "orderHistory": [
+    {
+      "userID": 12,
+      "date": "2021/07/19 09:22:18",
+      "itemID": 961177,
+      "number": 3,
+      "orderID": 664871,
+      "itemName": "apple"
+    }
+  ],
+  "admins": [
+    {
+      "ID": 1,
+      "password": "1"
+    }
+  ]
 }

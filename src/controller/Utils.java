@@ -3,7 +3,6 @@ package controller;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
-import static java.lang.Math.floor;
 
 public class Utils {
 
@@ -16,20 +15,8 @@ public class Utils {
         return digits;
     }
 
-    static String halfOfSpaces(String word, int maxLength) {
-        String spaces = "";
-        for (int i = 0; i < floor((maxLength - word.length())/2); i++) {
-            spaces += " ";
-        }
-        return spaces;
-    }
-
     static String spaces(String word, int maxLength) {
-        String spaces = "";
-        for (int i = 0; i <= maxLength - word.length(); i++) {
-            spaces += " ";
-        }
-        return spaces;
+        return " ".repeat(Math.max(0, maxLength - word.length() + 1));
     }
 
     static String date() {
@@ -42,8 +29,8 @@ public class Utils {
             Random rnd = new Random();
             int random = rnd.nextInt(999999);
             if (Item.findItem(Integer.parseInt(String.format("%06d", random))) == null
-            && Order.findOrder(Integer.parseInt(String.format("%06d", random))) == null
-            && Item.findDeletedItem(Integer.parseInt(String.format("%06d", random))) == null)
+                    && Order.findOrder(Integer.parseInt(String.format("%06d", random))) == null
+                    && Item.findDeletedItem(Integer.parseInt(String.format("%06d", random))) == null)
                 return Integer.parseInt(String.format("%06d", random));
         }
     }

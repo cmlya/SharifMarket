@@ -2,6 +2,7 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -9,22 +10,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Database {
-    private ArrayList<Customer> customers = new ArrayList<>();
-    private ArrayList<Item> items = new ArrayList<>();
-    private ArrayList<Item> deletedItems = new ArrayList<>();
-    private ArrayList<Order> orders = new ArrayList<>();
-    private ArrayList<Order> orderHistory = new ArrayList<>();
-    private ArrayList<Admin> admins = new ArrayList<>();
+    private final ArrayList<Customer> customers = new ArrayList<>();
+    private final ArrayList<Item> items = new ArrayList<>();
+    private final ArrayList<Item> deletedItems = new ArrayList<>();
+    private final ArrayList<Order> orders = new ArrayList<>();
+    private final ArrayList<Order> orderHistory = new ArrayList<>();
+    private final ArrayList<Admin> admins = new ArrayList<>();
     private Customer currentCustomer;
     private Admin currentAdmin;
 
     static Database database;
 
     static Database getInstance() {
-        if(database == null) {
-            read();
-            //database = new Database();
-        }
+        if(database == null) read();
         return database;
     }
 

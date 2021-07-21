@@ -1,4 +1,4 @@
-// ba mashverate Seyed Ali Hosseini :) :|
+// special thanks to @AlieNiT
 package model;
 
 import controller.AdminInputProcessor;

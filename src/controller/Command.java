@@ -38,10 +38,9 @@ public enum Command {
     }
 
     public static Command findCommand(String input) {
-        for (Command command : Command.values()) {
-            if(Pattern.matches(command.regex, input))
+        for (Command command : Command.values())
+            if (Pattern.matches(command.regex, input))
                 return command;
-        }
         return INVALID;
     }
 }

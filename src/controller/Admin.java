@@ -1,10 +1,9 @@
 package controller;
 
 public class Admin {
-    private int ID;
-    private String password;
+    private final int ID;
+    private final String password;
 
-    // constructor
     public Admin(int ID, String password) {
         this.ID = ID;
         this.password = password;
@@ -12,12 +11,7 @@ public class Admin {
     }
 
     public static Admin findAdmin(int ID) {
-        for (Admin admin : Database.getInstance().getAdmins()){
-            if (admin.getID() == ID) {
-                return admin;
-            }
-        }
-        return null;
+        return Database.getInstance().getAdmins().stream().filter(admin -> admin.getID() == ID).findFirst().orElse(null);
     }
 
     public int getID() { return ID; }

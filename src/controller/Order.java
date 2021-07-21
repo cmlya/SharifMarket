@@ -1,18 +1,18 @@
 package controller;
 
 import model.ConsoleColors;
+
 import static controller.Utils.digitCount;
 import static controller.Utils.spaces;
 
 public class Order {
-    private int userID;
-    private String date;
-    private int itemID;
-    private int number;
-    private int orderID;
-    private String itemName;
+    private final int userID;
+    private final String date;
+    private final int itemID;
+    private final int number;
+    private final int orderID;
+    private final String itemName;
 
-    // constructor
     public Order(int userID, String date, int itemID, int number, int orderID, String itemName) {
         this.userID = userID;
         this.date = date;
@@ -24,10 +24,7 @@ public class Order {
     }
 
     public static Order findOrder(int orderID) {
-        for (Order order : Database.getInstance().getOrders())
-            if (order.orderID == orderID)
-                return order;
-        return null;
+        return Database.getInstance().getOrders().stream().filter(order -> order.orderID == orderID).findFirst().orElse(null);
     }
 
     public static void printOrders() {
@@ -53,13 +50,12 @@ public class Order {
         for (int i = 0; i < header.length(); i++)
             System.out.print(ConsoleColors.BLUE_BRIGHT + "-" + ConsoleColors.RESET);
         System.out.println();
-        for (Order order : Database.getInstance().getOrders()) {
+        for (Order order : Database.getInstance().getOrders())
             System.out.println(order.orderID + spaces(String.valueOf(order.orderID), 8) +
                     order.userID + spaces(String.valueOf(order.userID), digitCount(maxUserID)) +
                     order.date + spaces(order.date, dateLength) +
                     order.itemName + spaces(order.itemName, maxLengthName) +
                     order.number);
-        }
     }
 
     public static void printHistory() {
@@ -85,13 +81,12 @@ public class Order {
         for (int i = 0; i < header.length(); i++)
             System.out.print(ConsoleColors.YELLOW_BOLD_BRIGHT + "-" + ConsoleColors.RESET);
         System.out.println();
-        for (Order order : Database.getInstance().getOrderHistory()) {
+        for (Order order : Database.getInstance().getOrderHistory())
             System.out.println(order.orderID + spaces(String.valueOf(order.orderID), 8) +
                     order.userID + spaces(String.valueOf(order.userID), digitCount(maxUserID)) +
                     order.date + spaces(order.date, dateLength) +
                     order.itemName + spaces(order.itemName, maxLengthName) +
                     order.number);
-        }
     }
 
     public int getUserID() { return userID; }

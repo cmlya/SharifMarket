@@ -13,8 +13,6 @@ public class UserInputProcessor {
     Scanner scanner = new Scanner(System.in);
 
     public void run() {
-        Database.getInstance().setCurrentCustomer(null);
-        Database.write();
         boolean exit = false;
         while (!exit) {
             System.out.print(ConsoleColors.YELLOW_BOLD_BRIGHT + "Enter command: " + ConsoleColors.RESET);
@@ -84,18 +82,15 @@ public class UserInputProcessor {
     }
 
     private void allItems(Matcher matcher) {
-        if (matcher.find())
-            Item.printAll();
+        if (matcher.find()) Item.printAll();
     }
 
     private void itemsInStock(Matcher matcher) {
-        if (matcher.find())
-            Item.printInStock();
+        if (matcher.find()) Item.printInStock();
     }
 
     private void outOfStock(Matcher matcher) {
-        if (matcher.find())
-            Item.printOutOfStock();
+        if (matcher.find()) Item.printOutOfStock();
     }
 
     private void order(Matcher matcher) {
@@ -116,17 +111,16 @@ public class UserInputProcessor {
             if (count <= 0) {
                 System.out.println(ConsoleColors.CYAN_BACKGROUND + "Invalid count." + ConsoleColors.RESET);
                 setOrder = false;
-            } else if (count > Objects.requireNonNull(Item.findItem(itemID)).getInStock()) {
+            } else if (count > Item.findItem(itemID).getInStock()) {
                 System.out.println("Not enough " + ConsoleColors.CYAN_BRIGHT +
-                        Objects.requireNonNull(Item.findItem(itemID)).getName() + ConsoleColors.RESET + " in stock.");
+                        Item.findItem(itemID).getName() + ConsoleColors.RESET + " in stock.");
                 setOrder = false;
             }
             if (setOrder) {
                 int orderID = randomCode();
-                String itemName = Objects.requireNonNull(Item.findItem(itemID)).getName();
+                String itemName = Item.findItem(itemID).getName();
                 new Order(Database.getInstance().getCurrentCustomer().getID(), date(), itemID, count, orderID, itemName);
-                Database.getInstance().setCount(Objects.requireNonNull(Item.findItem(itemID)),
-                        Objects.requireNonNull(Item.findItem(itemID)).getInStock() - count);
+                Database.getInstance().setCount(Item.findItem(itemID), Item.findItem(itemID).getInStock() - count);
                 System.out.println("You have ordered " + ConsoleColors.GREEN_BACKGROUND + count +
                         ConsoleColors.RESET + " " + ConsoleColors.GREEN_BACKGROUND + itemName +
                         ConsoleColors.RESET + ". Your order ID is: " + ConsoleColors.GREEN_BACKGROUND +
@@ -146,13 +140,13 @@ public class UserInputProcessor {
                 System.out.println(ConsoleColors.RED_BACKGROUND + "No order with such order ID exists." + ConsoleColors.RESET);
                 return;
             }
-            if (Database.getInstance().getCurrentCustomer().getID() != Objects.requireNonNull(Order.findOrder(orderID)).getUserID()) {
+            if (Database.getInstance().getCurrentCustomer().getID() != Order.findOrder(orderID).getUserID()) {
                 System.out.println("You can only cancel orders you have made. Order was not cancelled.");
                 return;
             }
-            if (Item.findItem(Objects.requireNonNull(Order.findOrder(orderID)).getItemID()) != null) {
-                Item item = Item.findItem(Objects.requireNonNull(Order.findOrder(orderID)).getItemID());
-                Objects.requireNonNull(item).setInStock(item.getInStock() + Objects.requireNonNull(Order.findOrder(orderID)).getNumber());
+            if (Item.findItem(Order.findOrder(orderID).getItemID()) != null) {
+                Item item = Item.findItem(Order.findOrder(orderID).getItemID());
+                item.setInStock(item.getInStock() + Order.findOrder(orderID).getNumber());
             }
             Database.getInstance().removeOrder(Order.findOrder(orderID));
             System.out.println(ConsoleColors.GREEN + "Order No. " + ConsoleColors.CYAN_BRIGHT + orderID + ConsoleColors.GREEN +

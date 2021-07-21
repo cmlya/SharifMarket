@@ -12,8 +12,6 @@ public class AdminInputProcessor {
     Scanner scanner = new Scanner(System.in);
 
     public void run() {
-        Database.getInstance().setCurrentAdmin(null);
-        Database.write();
         boolean exit = false;
         while (!exit) {
             System.out.print(ConsoleColors.GREEN_BOLD_BRIGHT + "Enter command: " + ConsoleColors.RESET);
@@ -72,7 +70,7 @@ public class AdminInputProcessor {
                 new Admin(ID, password);
                 System.out.println("Account created successfully!");
             } else {
-                String password = Objects.requireNonNull(Admin.findAdmin(ID)).getPassword();
+                String password = Admin.findAdmin(ID).getPassword();
                 System.out.println("Enter password: ");
                 String attempt = scanner.nextLine();
                 int limit = 3;
@@ -311,8 +309,7 @@ public class AdminInputProcessor {
     }
 
     private void newOrders(Matcher matcher) {
-        if (matcher.find())
-            Order.printOrders();
+        if (matcher.find()) Order.printOrders();
     }
 
     private void history(Matcher matcher) {
@@ -337,31 +334,29 @@ public class AdminInputProcessor {
                 System.out.println("No item associated with this ID.");
                 return;
             }
-            if (Item.findItem(itemID) == null) System.out.println("Profit from " + ConsoleColors.CYAN_BRIGHT +
-                    Objects.requireNonNull(Item.findDeletedItem(itemID)).getName() + ConsoleColors.RESET + ": " +
-                    Objects.requireNonNull(Item.findDeletedItem(itemID)).getItemProfit());
-            else System.out.println("Profit from " + ConsoleColors.CYAN_BRIGHT +
-                    Objects.requireNonNull(Item.findItem(itemID)).getName() + ConsoleColors.RESET + ": " +
-                    Objects.requireNonNull(Item.findItem(itemID)).getItemProfit());
+            if (Item.findItem(itemID) == null)
+                System.out.println("Profit from " + ConsoleColors.CYAN_BRIGHT + Objects.requireNonNull(Item.findDeletedItem(itemID)).getName() +
+                        ConsoleColors.RESET + ": " + Objects.requireNonNull(Item.findDeletedItem(itemID)).getItemProfit());
+            else
+                System.out.println("Profit from " + ConsoleColors.CYAN_BRIGHT + Objects.requireNonNull(Item.findItem(itemID)).getName() +
+                        ConsoleColors.RESET + ": " + Objects.requireNonNull(Item.findItem(itemID)).getItemProfit());
         }
     }
 
     private void sales(Matcher matcher) {
         if (matcher.find()) {
-            for (Item item : Database.getInstance().getItems()) {
+            for (Item item : Database.getInstance().getItems())
                 System.out.println(ConsoleColors.CYAN_UNDERLINED + item.getName() +
                         " Sales:" + ConsoleColors.RESET + "\nOrders: " + ConsoleColors.CYAN_BRIGHT + item.getOrdersIn() + ConsoleColors.RESET +
                         "\tNumber Sold: " + ConsoleColors.CYAN_BRIGHT + item.getNumberSold() + ConsoleColors.RESET +
                         "\nMoney Received: " + ConsoleColors.CYAN_BRIGHT + item.getMoneyMadeFrom() + ConsoleColors.RESET +
                         "\tProfit: " + ConsoleColors.CYAN_BRIGHT + item.getItemProfit() + ConsoleColors.RESET);
-            }
-            for (Item item : Database.getInstance().getDeletedItems()) {
+            for (Item item : Database.getInstance().getDeletedItems())
                 System.out.println(ConsoleColors.CYAN_UNDERLINED + item.getName() +
                         " Sales:" + ConsoleColors.RESET + "\nOrders: " + ConsoleColors.CYAN_BRIGHT + item.getOrdersIn() + ConsoleColors.RESET +
                         "\tNumber Sold: " + ConsoleColors.CYAN_BRIGHT + item.getNumberSold() + ConsoleColors.RESET +
                         "\nMoney Received: " + ConsoleColors.CYAN_BRIGHT + item.getMoneyMadeFrom() + ConsoleColors.RESET +
                         "\tProfit: " + ConsoleColors.CYAN_BRIGHT + item.getItemProfit() + ConsoleColors.RESET);
-            }
         }
     }
 
